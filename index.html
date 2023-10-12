@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.4/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    
+
+
+
+    <title>Thông tin End User</title>
+    <style>
+        body{
+            background:linear-gradient(rgb(17, 24, 39), rgb(75, 85, 99));
+        margin-left: 5%;
+        margin-right:  5%;
+        margin-bottom: 10%;
+        }
+        tbody{
+            background-color: whitesmoke;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        .label-input-container {
+            display: flex;
+            align-items: center;
+            margin:10px;
+        }
+
+        .label-input-container label {
+            width: 300px; /* Đặt độ rộng của label */
+           
+        }
+
+        .label-input-container input {
+            flex: 0; /* Kích thước của input tự thay đổi để nắm vững không gian còn lại */
+            border-radius: 30px;
+            height:20px
+        }
+        .label-input-container input:hover{
+            border-color: blue;
+            border-width: 2px;
+        }
+        textarea:hover{
+            border-color: blue;
+            border-width: 2px;
+        }
+       form{
+        border-color: whitesmoke;
+        border-width: 5px;
+        border-style: solid;
+        width: fit-content;
+        background:radial-gradient(rgb(55, 65, 81), rgb(17, 24, 39), rgb(0, 0, 0));
+        color:white;
+        font-family: 'Times New Roman';
+        font-weight: bold;
+        border-radius: 20px;
+        
+       }
+       #tieude{
+        margin-left: 100px;
+        margin-top: 10px;
+       }
+       #addButton{
+        background:linear-gradient(to left top, rgb(16, 185, 129), rgb(101, 163, 13));
+        color: white;
+        font-size: 20px;
+        border-radius: 50px;
+        font-weight: bold;
+        height: 50px;
+        width: 80px;
+        margin-left: 70%;
+       }
+       #addButton:hover{
+        cursor: pointer;
+       }
+       #headercontent{
+        display: flex;
+        width: 20%;
+       }
+       #applyfile{
+        margin-left: 20%;
+       }
+       #scrollToTopButton{
+        position: fixed;
+    bottom: 60px; /* Điều chỉnh vị trí của nút cuộn dưới cùng */
+    right: 5px; /* Điều chỉnh vị trí của nút cuộn dưới cùng */
+    background-color: orange;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+   
+    cursor: pointer;
+    border-radius: 100px;
+
+       }
+       button{
+        border-color: white;
+        border-width: 2px;
+        border-style: solid;
+       }
+#scrollToBottomButton {
+    position: fixed;
+    bottom: 20px; /* Điều chỉnh vị trí của nút cuộn dưới cùng */
+    right: 5px; /* Điều chỉnh vị trí của nút cuộn dưới cùng */
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    
+    cursor: pointer;
+    border-radius: 100px;
+}
+button:hover{
+    cursor: pointer;
+    opacity: 0.3;
+    color:white;
+}
+/* CSS cho hộp thoại modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #000;
+    border-radius: 5px;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+#showInstructionsButton{
+margin-bottom: 30px;
+background-color: red;
+color:  white;
+width: fit-content;
+height: 30px;
+border-radius: 50px;
+font-weight: bold;
+font-style: italic;
+}
+#clock{
+border-width: 10px ;
+border-color: #f2f2f2;
+width: fit-content;
+height: fit-content;
+border-width: 10px ;
+border-color: #f2f2f2;
+margin-right: 10%;
+}
+#time{
+   color:white;
+    font-size: 100px;
+    font-style: italic;
+
+}
+
+    </style>
+</head>
+<body>
+    
+    <div id="headercontent">
+    <form>
+        <div id="tieude">
+        <h1 >ĐIỀN THÔNG TIN</h1>
+    </div>
+    
+        <div class="label-input-container">
+            <label for="englishCompanyName">End user Company Name* (English name):</label>
+            <input type="text" id="englishCompanyName" name="englishCompanyName" required>
+        </div>
+        
+        <div class="label-input-container">
+            <label for="vietnameseCompanyName">End user Company Name* (Vietnamese):</label>
+            <input type="text" id="vietnameseCompanyName" name="vietnameseCompanyName" required>
+        </div>
+        
+        <div class="label-input-container">
+            <label for="companyAddress">Company Address*:</label>
+            <input type="text" id="companyAddress" name="companyAddress" required>
+        </div>
+        
+        <div class="label-input-container">
+            <label for="estimatedClosureMonth">Estimated Closure Month*:</label>
+            <input type="month" id="estimatedClosureMonth" name="estimatedClosureMonth" required>
+        </div>
+        
+        <div class="label-input-container">
+            <label for="projectName">Project Name*:</label>
+            <input type="text" id="projectName" name="projectName" required>
+        </div>
+        
+        <div class="label-input-container">
+            <label for="qty">Qty*:</label>
+            <input type="number" id="qty" name="qty" required>
+        </div>
+        
+        <div class="label-input-container">
+            <label for="sku">SKU/ Product/ Description*:</label>
+            <textarea style="border-radius: 10px;height: 100px;" id="sku" name="sku" required></textarea>
+        </div>
+        
+        <div class="label-input-container">
+            <label for="endUserName">End User Name:</label>
+            <input type="text" id="endUserName" name="endUserName">
+        </div>
+        
+        <div class="label-input-container">
+            <label for="endUserPhone">End User Phone:</label>
+            <input type="tel" id="endUserPhone" name="endUserPhone">
+        </div>
+        
+        <div class="label-input-container">
+            <label for="endUserEmail">End User Email*:</label>
+            <input type="email" id="endUserEmail" name="endUserEmail" required>
+        </div>
+        
+        <div class="label-input-container">
+            <label for="endUserWebsite">End User Website:</label>
+            <input type="url" id="endUserWebsite" name="endUserWebsite">
+        </div>
+        
+        <button id="addButton">+</button>
+        
+    </form>
+   
+    <div id="applyfile">
+        <button id="showInstructionsButton">CÁCH IMPORT FILE !</button></br>
+        <a href="https://products.aspose.app/words/vi/conversion/word-to-excel" target="_blank"> <!-- Thay "https://example.com" bằng URL mà bạn muốn liên kết đến -->
+            <button style="background-color: #325C9A;color:white;font-weight: bold;width: 300px;height:100px;border-radius: 100px;"><i class="fa-solid fa-file-word fa-xl" style="color: #fcfcfc;"></i>  CHUYỂN WORD SANG EXCEL</button>
+        </a>
+       </br>
+    <input style=" color:red;font-weight: bold;margin: 15px;"type="file" id="excelFileInput" accept=".xlsx">
+</br>
+
+    <!-- Button to trigger the Excel file upload -->
+    <button style="background-color: yellowgreen;color:white;font-weight: bold;width: 400px;height:100px;border-radius: 100px;" id="uploadExcelButton">APPLY FILE EXCEL <i class="fa-solid fa-circle-check fa-2xl" style="color: #2cf239;"></i></button>
+    <button style="background-color: #047a4d;color:white;font-weight: bold;width: 600px;height:100px;border-radius: 100px;margin-top:100px"  id="exportToExcelButton">DOAWLOAD FILE <i class="fa-solid fa-download fa-2xl" style="color: #ffffff;"></i></button>
+</div>
+<div class="clock">
+    <div id="time">00:00:00</div>
+</div>
+</div>
+
+    <h1 style="color:yellow;text-align: center;">GUESS INFO</h1>
+    <table id="wordTable" style="font-weight: bold;">
+        <tr>
+            <th style="text-align: center;background-color:#00AE72;color: aliceblue; font-size: 20px;">STT</th>
+            <th style="text-align: center;background-color:#00AE72;color: aliceblue; font-size: 20px;">End user Company Name* (English name)</th>
+            <th style="text-align: center;background-color:#00AE72;color: aliceblue; font-size: 20px;">End user Company Name* (Vietnamese)</th>
+            <th style="text-align: center;background-color:#00AE72;color: aliceblue; font-size: 20px;">Company Address*</th>
+            <th style="text-align: center;background-color:#00AE72;color: aliceblue; font-size: 20px;">Estimated Closure Month*</th>
+            <th style="text-align: center;background-color:#00AE72;color: aliceblue; font-size: 20px;">Project Name*</th>
+            <th style="text-align: center;background-color:#00AE72;color: aliceblue; font-size: 20px;">Qty*</th>
+            <th style="text-align: center;background-color:#00AE72;color: aliceblue; font-size: 20px;">SKU/ Product/ Description.*</th>
+            <th style="text-align: center;background-color:#00AE72;color: aliceblue; font-size: 20px;">End User Name</th>
+            <th style="text-align: center;background-color:#00AE72;color: aliceblue; font-size: 20px;">End User Phone</th>
+            <th style="text-align: center;background-color:#00AE72;color: aliceblue; font-size: 20px;">End User Email*</th>
+            <th style="text-align: center;background-color:#00AE72;color: aliceblue; font-size: 20px;">End User Website</th>
+            
+        </tr>
+    </table>
+    
+    <button id="scrollToTopButton"><i class="fa-solid fa-arrow-up fa-xl" style="color: #ffffff;"></i></button></br>
+    <button id="scrollToBottomButton"><i class="fa-solid fa-arrow-up fa-rotate-180 fa-xl" style="color: #ffffff;"></i></button>
+    <div >
+       
+
+<!-- Hộp thoại ẩn -->
+<div id="instructionsModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" id="closeInstructions">&times;</span>
+        <h2>HƯỚNG DẪN SỬ DỤNG</h2>
+        <p>Bước 1: ĐỔI FILE WORD SANG FILE EXCEL</p>
+        <p>Bước 2: CHỌN TỆP EXCEL VỪA ĐỔI</p>
+        <p>Bước 3: APPLY FILE</p>
+    </div>
+</div>
+    </div>
+    <script>
+        alert("HELLO BỐ GIÀ :D")
+        function updateClock() {
+    const currentTime = new Date();
+    const hours = currentTime.getHours().toString().padStart(2, '0');
+    const minutes = currentTime.getMinutes().toString().padStart(2, '0');
+    const seconds = currentTime.getSeconds().toString().padStart(2, '0');
+    const timeString = `${hours}:${minutes}:${seconds}`;
+    document.getElementById('time').textContent = timeString;
+}
+
+// Cập nhật đồng hồ mỗi giây
+setInterval(updateClock, 1000);
+
+// Gọi lần đầu để hiển thị ngay khi trang được tải
+updateClock();
+
+        // Hiển thị hộp thoại khi nhấn vào nút "HƯỚNG DẪN SỬ DỤNG"
+document.getElementById("showInstructionsButton").addEventListener("click", function () {
+    document.getElementById("instructionsModal").style.display = "block";
+});
+
+// Đóng hộp thoại khi nhấn vào nút đóng hoặc bất kỳ nơi nào ngoài hộp thoại
+document.getElementById("closeInstructions").addEventListener("click", function () {
+    document.getElementById("instructionsModal").style.display = "none";
+});
+
+window.onclick = function (event) {
+    var modal = document.getElementById("instructionsModal");
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+};
+
+        // Nút lướt xuống cuối
+        document.getElementById("scrollToBottomButton").addEventListener("click", function () {
+    scrollToBottom();
+});
+
+// Nút lướt lên đầu
+document.getElementById("scrollToTopButton").addEventListener("click", function () {
+    scrollToTop();
+});
+
+// Cuộn xuống đáy
+function scrollToBottom() {
+    const scrollHeight = document.body.scrollHeight;
+    const step = Math.max(scrollHeight / 100, 50); // Chia thành 100 bước (hoặc điều chỉnh số bước tùy ý)
+    let currentPosition = window.scrollY;
+
+    const scrollInterval = setInterval(function () {
+        currentPosition += step;
+        window.scrollTo(0, currentPosition);
+
+        if (currentPosition >= scrollHeight) {
+            clearInterval(scrollInterval);
+        }
+    }, 10); // Thời gian giữa các bước cuộn (hoặc điều chỉnh tùy ý)
+}
+
+// Cuộn lên đầu
+function scrollToTop() {
+    const step = Math.max(window.scrollY / 100, 50); // Chia thành 100 bước (hoặc điều chỉnh số bước tùy ý)
+    let currentPosition = window.scrollY;
+
+    const scrollInterval = setInterval(function () {
+        currentPosition -= step;
+        window.scrollTo(0, currentPosition);
+
+        if (currentPosition <= 0) {
+            clearInterval(scrollInterval);
+        }
+    }, 10); // Thời gian giữa các bước cuộn (hoặc điều chỉnh tùy ý)
+}
+
+        let sttCounter = 0; // Biến đếm STT
+        let isEditing = false;
+        // Hàm để cập nhật giá trị STT
+        function updateSTT() {
+            const table = document.querySelector("table");
+            const rows = table.querySelectorAll("tr");
+            
+            // Bỏ qua hàng đầu (header)
+            for (let i = 1; i < rows.length; i++) {
+                const cell1 = rows[i].cells[0];
+                cell1.textContent = i;
+            }
+        }
+        document.getElementById("wordTable").addEventListener("click", function (e) {
+            if (e.target.cellIndex > 0 && e.target.cellIndex < 10) { // Chỉnh sửa nếu không phải là cột STT hoặc Actions
+                isEditing = true;
+                e.target.contentEditable = "true";
+                e.target.focus();
+            }
+        });
+        document.getElementById("wordTable").addEventListener("blur", function (e) {
+            if (isEditing) {
+                isEditing = false;
+                e.target.contentEditable = "false";
+                updateCellValue(e.target);
+            }
+        });
+        document.getElementById("wordTable").addEventListener("keydown", function (e) {
+            if (isEditing && e.key === "Enter") {
+                e.preventDefault();
+                e.target.contentEditable = "false";
+                isEditing = false;
+                updateCellValue(e.target);
+            }
+        });
+        function updateCellValue(cell) {
+            const rowIndex = cell.parentElement.rowIndex;
+            const columnIndex = cell.cellIndex;
+
+            // Cập nhật giá trị vào dữ liệu hoặc bảng Excel
+            // Ví dụ: bạn có thể lưu giá trị vào một mảng dữ liệu (tableData) hoặc thực hiện các thao tác cập nhật dữ liệu ở đây.
+
+            // Ví dụ: Cập nhật giá trị STT
+            if (columnIndex === 0) {
+                cell.textContent = rowIndex;
+            }
+        }
+        // Hàm để thêm nút Edit và Delete vào hàng
+       // Thêm nút Edit và Delete
+       function addEditDeleteButtons(row, rowIndex) {
+            var cell = row.insertCell(12); // Chỉnh lại vị trí cột của nút Edit và Delete
+            var editButton = document.createElement("button");
+            editButton.style='background-color:yellowgreen;color:white;border-radius:15px;cursor:pointer;margin-bottom:5px'
+            editButton.innerHTML = "Edit";
+            editButton.addEventListener("click", function() {
+                editRow(rowIndex);
+            });
+            cell.appendChild(editButton);
+
+            var deleteButton = document.createElement("button");
+            deleteButton.innerHTML = "Delete";
+            deleteButton.style='background-color:red;color:white;border-radius:15px;cursor:pointer'
+            deleteButton.addEventListener("click", function() {
+                deleteRow(rowIndex);
+            });
+            cell.appendChild(deleteButton);
+        }
+
+
+        // Hàm để xóa hàng
+        function deleteRow(rowIndex) {
+    var table = document.querySelector("table");
+    if (rowIndex >= 0 && rowIndex < table.rows.length - 1) {
+        table.deleteRow(rowIndex + 1); // Adding 1 because of the table header row
+        sttCounter--; // Giảm STT khi xoá hàng
+        updateSTT(); // Cập nhật lại STT
+    }
+}
+        // Hàm để chỉnh sửa hàng
+        // Hàm để chỉnh sửa hàng
+// Hàm để chỉnh sửa hàng
+function editRow(rowIndex) {
+    var table = document.querySelector("table");
+    var row = table.rows[rowIndex + 1]; // Adding 1 because of the table header row
+    var cells = row.cells;
+
+    // Populate input fields with row data for editing
+    document.getElementById("englishCompanyName").value = cells[1].innerHTML;
+    document.getElementById("vietnameseCompanyName").value = cells[2].innerHTML;
+    document.getElementById("companyAddress").value = cells[3].innerHTML;
+    document.getElementById("estimatedClosureMonth").value = cells[4].innerHTML;
+    document.getElementById("projectName").value = cells[5].innerHTML;
+    document.getElementById("qty").value = cells[6].innerHTML;
+    document.getElementById("sku").value = cells[7].innerHTML;
+    document.getElementById("endUserName").value = cells[8].innerHTML;
+    document.getElementById("endUserPhone").value = cells[9].innerHTML;
+    document.getElementById("endUserEmail").value = cells[10].innerHTML;
+    document.getElementById("endUserWebsite").value = cells[11].innerHTML;
+
+    // Delete the existing row
+    deleteRow(rowIndex);
+    updateSTT();
+}
+
+
+
+document.getElementById("addButton").addEventListener("click", function() {
+    // Lấy giá trị từ các trường nhập
+    var englishCompanyName = document.getElementById("englishCompanyName").value;
+    var vietnameseCompanyName = document.getElementById("vietnameseCompanyName").value;
+    var companyAddress = document.getElementById("companyAddress").value;
+    var estimatedClosureMonth = document.getElementById("estimatedClosureMonth").value;
+    var projectName = document.getElementById("projectName").value;
+    var skuDescription = document.getElementById("sku").value; // Thêm dòng này
+    var qty = document.getElementById("qty").value; // Thêm dòng này
+    var endUserName = document.getElementById("endUserName").value;
+    var endUserPhone = document.getElementById("endUserPhone").value;
+    var endUserEmail = document.getElementById("endUserEmail").value;
+    var endUserWebsite = document.getElementById("endUserWebsite").value;
+
+    // Thêm dữ liệu vào bảng và gắn nút "Edit" và "Delete"
+    var table = document.querySelector("table");
+    var newRow = table.insertRow(table.rows.length);
+
+    var cell1 = newRow.insertCell(0);
+    var cell2 = newRow.insertCell(1);
+    var cell3 = newRow.insertCell(2);
+    var cell4 = newRow.insertCell(3);
+    var cell5 = newRow.insertCell(4);
+    var cell6 = newRow.insertCell(5);
+    var cell7 = newRow.insertCell(6);
+    var cell8 = newRow.insertCell(7);
+    var cell9 = newRow.insertCell(8);
+    var cell10 = newRow.insertCell(9);
+    var cell11 = newRow.insertCell(10); // Thêm dòng này
+    var cell12 = newRow.insertCell(11); // Thêm dòng này
+
+    // Gán giá trị
+    cell1.innerHTML = sttCounter;
+    cell2.innerHTML = englishCompanyName;
+    cell3.innerHTML = vietnameseCompanyName;
+    cell4.innerHTML = companyAddress;
+    cell5.innerHTML = estimatedClosureMonth;
+    cell6.innerHTML = projectName;
+    cell7.innerHTML = qty; // Thêm dòng này
+    cell8.innerHTML = skuDescription; 
+    cell9.innerHTML = endUserName;
+    cell10.innerHTML = endUserPhone;
+    cell11.innerHTML = endUserEmail; // Thêm dòng này
+cell12.innerHTML = endUserWebsite; // Thêm dòng này
+
+    // Thêm nút Edit và Delete
+    addEditDeleteButtons(newRow, sttCounter);
+
+    // Xóa nội dung các ô input sau khi thêm vào bảng
+    document.getElementById("englishCompanyName").value = "";
+    document.getElementById("vietnameseCompanyName").value = "";
+    document.getElementById("companyAddress").value = "";
+    document.getElementById("estimatedClosureMonth").value = "";
+    document.getElementById("projectName").value = "";
+    document.getElementById("sku").value = ""; // Thêm dòng này
+    document.getElementById("qty").value = ""; // Thêm dòng này
+    document.getElementById("endUserName").value = "";
+    document.getElementById("endUserPhone").value = "";
+    document.getElementById("endUserEmail").value = "";
+    document.getElementById("endUserWebsite").value = "";
+
+    // Tăng giá trị STT lên 1 sau mỗi lần thêm
+    sttCounter++;
+
+    // Cập nhật giá trị STT
+    updateSTT(cell1, sttCounter);
+});
+
+
+        // Lắng nghe sự kiện khi nút "Upload Excel File" được nhấn
+        document.getElementById("uploadExcelButton").addEventListener("click", function () {
+    var excelFileInput = document.getElementById("excelFileInput");
+    var excelFile = excelFileInput.files[0];
+
+    if (excelFile) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var data = new Uint8Array(e.target.result);
+            var workbook = XLSX.read(data, { type: 'array' });
+            var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+
+            // Define cell addresses for data extraction
+            var cellAddresses = {
+                englishCompanyName: 'B2',
+                vietnameseCompanyName: 'B3',
+                companyAddressStart: 'B4',
+                companyAddressEnd: 'B5',
+                estimatedClosureMonth: 'B8',
+                projectName: 'B6',
+                skuDescription: 'A17', // Merged cell
+                qty: 'D17',
+                endUserName: 'E2',
+                endUserEmail: 'E3',
+                endUserWebsite: 'E5',
+                endUserPhone: 'E4'
+            };
+
+            // Extract data from Excel and populate the corresponding fields
+            document.getElementById("englishCompanyName").value = worksheet[cellAddresses.englishCompanyName].v;
+            document.getElementById("vietnameseCompanyName").value = worksheet[cellAddresses.vietnameseCompanyName].v;
+
+            var companyAddress = '';
+            for (var i = cellAddresses.companyAddressStart.charCodeAt(0);
+                i <= cellAddresses.companyAddressEnd.charCodeAt(0);
+                i++) {
+                var cell = String.fromCharCode(i) + cellAddresses.companyAddressStart[1];
+                if (worksheet[cell]) {
+                    companyAddress += worksheet[cell].v + ' ';
+                }
+            }
+            document.getElementById("companyAddress").value = companyAddress.trim();
+
+            document.getElementById("sku").value = worksheet[cellAddresses.skuDescription].v; // Merged cell
+            document.getElementById("qty").value = worksheet[cellAddresses.qty].v;
+            document.getElementById("estimatedClosureMonth").value = worksheet[cellAddresses.estimatedClosureMonth].v;
+            document.getElementById("projectName").value = worksheet[cellAddresses.projectName].v;
+            document.getElementById("endUserName").value = worksheet[cellAddresses.endUserName].v;
+            document.getElementById("endUserEmail").value = worksheet[cellAddresses.endUserEmail].v;
+            document.getElementById("endUserWebsite").value = worksheet[cellAddresses.endUserWebsite].v;
+            document.getElementById("endUserPhone").value = worksheet[cellAddresses.endUserPhone].v;
+        };
+        reader.readAsArrayBuffer(excelFile);
+    } else {
+        alert("Hãy chọn một tệp Excel để tải lên.");
+    }
+});
+
+        function addRowToTable() {
+    // Tạo một hàng mới
+    var newRow = table.insertRow(table.rows.length);
+    
+    // Gắn nút "Edit" và "Delete" vào hàng này
+    addEditDeleteButtons(newRow, sttCounter);
+    sttCounter++;
+    updateSTT();
+}
+ // Hàm để xuất dữ liệu ra file Excel
+
+        // Lắng nghe sự kiện click trên nút "Export to Excel"
+      
+
+        // Hàm để xuất dữ liệu ra file Excel
+        function exportToExcel() {
+    const table = document.querySelector("table");
+    const rows = table.querySelectorAll("tr");
+    const data = [];
+
+    // Loop through each row in the table
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const rowData = [];
+
+        if (i === 0) {
+            // Handle the header row
+            for (let j = 0; j < row.cells.length - 1; j++) {
+                rowData.push(row.cells[j].textContent);
+            }
+        } else {
+            // Handle data rows
+            for (let j = 0; j < row.cells.length - 1; j++) {
+                rowData.push(row.cells[j].textContent);
+            }
+        }
+
+        data.push(rowData);
+    }
+
+    // Create an ExcelJS workbook and worksheet
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("EndUserData");
+
+    // Add data to the Excel worksheet
+    for (const row of data) {
+        worksheet.addRow(row);
+    }
+
+    // Set bold font for the header row (first row)
+    const headerRow = worksheet.getRow(1);
+    headerRow.eachCell((cell) => {
+        cell.font = { bold: true };
+    });
+
+    // Set border style for all cells
+    const borderStyle = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
+    };
+    worksheet.eachRow((row) => {
+        row.eachCell((cell) => {
+            cell.border = borderStyle;
+        });
+    });
+
+    // Optimize column widths
+    worksheet.columns.forEach((column) => {
+        let maxCellWidth = 0;
+        column.eachCell({ includeEmpty: true }, (cell) => {
+            const cellWidth = cell.value ? String(cell.value).length : 0;
+            if (cellWidth > maxCellWidth) {
+                maxCellWidth = cellWidth;
+            }
+        });
+        column.width = maxCellWidth + 2; // Add 2 pixels padding
+    });
+
+    // Create a Blob from the Excel data and download the Excel file
+    workbook.xlsx.writeBuffer().then((data) => {
+        const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+        saveAs(blob, "end_user_data.xlsx");
+    });
+}
+
+document.getElementById("exportToExcelButton").addEventListener("click", function () {
+    exportToExcel();
+});
+
+
+
+    </script>
+</body>
+</html>
+    </script>
+</body>
+</html>
